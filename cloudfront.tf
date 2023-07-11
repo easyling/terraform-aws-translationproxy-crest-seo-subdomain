@@ -27,32 +27,20 @@ resource "aws_cloudfront_distribution" "translations_at_root" {
 
     lambda_function_association {
       event_type   = "viewer-request"
-      lambda_arn   = aws_lambda_function.prerender_headers.qualified_arn
+      lambda_arn   = "arn:aws:lambda:us-east-1:706153060740:function:crest-prerender-test-SetPrerenderHeader-TtxzCLiZqbo6:6"
       include_body = true
     }
 
     lambda_function_association {
       event_type   = "origin-request"
-      lambda_arn   = aws_lambda_function.prerender_redirect.qualified_arn
+      lambda_arn   = "arn:aws:lambda:us-east-1:706153060740:function:crest-prerender-test-RedirectToPrerender-FBhJ3KhHMR9K:2"
       include_body = true
     }
 
     target_origin_id       = "translationproxy-${var.locale}"
     viewer_protocol_policy = "allow-all"
-    forwarded_values {
-      query_string = var.forward_query_strings
-      cookies {
-        forward = "all"
-      }
 
-      headers = [
-        "CloudFront-Viewer-Country",
-        "Origin",
-        "Referer",
-        "User-Agent",
-        "X-TranslationProxy-CrawlingFor",
-      ]
-    }
+    cache_policy_id = var.cache_policy_id
   }
 
   origin {

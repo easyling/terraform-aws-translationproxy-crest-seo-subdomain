@@ -34,3 +34,9 @@ variable "min_tls_version" {
   description = "Minimum TLS version spec for CloudFront to accept."
   default     = "TLSv1.1_2016"
 }
+
+variable "cache_policy_id" {
+  type = string
+  description = "Cache policy ID for CF"
+  default = "34ddda49-18dd-416c-94c9-728cbbbc6a42"
+}
