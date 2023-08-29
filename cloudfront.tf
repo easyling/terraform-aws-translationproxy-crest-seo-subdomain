@@ -27,13 +27,13 @@ resource "aws_cloudfront_distribution" "translations_at_root" {
 
     lambda_function_association {
       event_type   = "viewer-request"
-      lambda_arn   = "arn:aws:lambda:us-east-1:706153060740:function:crest-prerender-test-SetPrerenderHeader-TtxzCLiZqbo6:6"
+      lambda_arn   = data.aws_lambda_function.set_prerender_header.qualified_arn
       include_body = true
     }
 
     lambda_function_association {
       event_type   = "origin-request"
-      lambda_arn   = "arn:aws:lambda:us-east-1:706153060740:function:crest-prerender-test-RedirectToPrerender-FBhJ3KhHMR9K:2"
+      lambda_arn   = data.aws_lambda_function.redirect_to_prerender.qualified_arn
       include_body = true
     }
 
@@ -44,7 +44,7 @@ resource "aws_cloudfront_distribution" "translations_at_root" {
   }
 
   origin {
-    domain_name = lower("${var.locale}-${var.project}.${var.app_domain}")
+    domain_name = lower("${var.locale}-${var.project}-j.${var.app_domain}")
     origin_id   = "translationproxy-${var.locale}"
 
     custom_header {
