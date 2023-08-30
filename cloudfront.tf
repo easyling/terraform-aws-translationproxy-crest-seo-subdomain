@@ -4,6 +4,8 @@ resource "aws_cloudfront_distribution" "translations_at_root" {
     var.domain
   ]
 
+  comment = "translationproxy_${var.project}_${var.locale}"
+
   tags = {
     product = "translationproxy",
     project = var.project,
@@ -27,20 +29,20 @@ resource "aws_cloudfront_distribution" "translations_at_root" {
 
     lambda_function_association {
       event_type   = "viewer-request"
-      lambda_arn   = data.aws_lambda_function.set_prerender_header.qualified_arn
+      lambda_arn = aws_lambda_function.prerender_headers.qualified_arn
       include_body = true
     }
 
     lambda_function_association {
       event_type   = "origin-request"
-      lambda_arn   = data.aws_lambda_function.redirect_to_prerender.qualified_arn
+      lambda_arn   = aws_lambda_function.prerender_redirect.qualified_arn
       include_body = true
     }
 
     target_origin_id       = "translationproxy-${var.locale}"
     viewer_protocol_policy = "allow-all"
 
-    cache_policy_id = var.cache_policy_id
+    cache_policy_id = aws_cloudfront_cache_policy.caching_with_queries.id
   }
 
   origin {
