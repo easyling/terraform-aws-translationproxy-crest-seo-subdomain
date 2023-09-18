@@ -13,20 +13,9 @@ variable "project" {
   type        = string
 }
 
-variable "forward_query_strings" {
-  description = "Forward query strings to Easyling. CAUTION: may decrease effectiveness of caching, and lead to greater traffic numbers."
-  default     = false
-  type        = bool
-}
-
 variable "app_domain" {
   description = "App domain provided by LSP"
   type        = string
-}
-
-variable "acm_cert_arn" {
-  description = "ARN of the dynamic certificate provisioned by AWS. Can be left empty, in which case HTTPS will not work!"
-  default     = ""
 }
 
 variable "min_tls_version" {
@@ -35,8 +24,20 @@ variable "min_tls_version" {
   default     = "TLSv1.1_2016"
 }
 
-variable "cache_policy_id" {
-  type = string
-  description = "Cache policy ID for CF"
-  default = "34ddda49-18dd-416c-94c9-728cbbbc6a42"
+variable "caching_min_ttl" {
+  type = number
+  description = "Minimum TTL for CloudFront cache in seconds"
+  default = 1
+}
+
+variable "caching_default_ttl" {
+  type = number
+  description = "Default TTL for CloudFront cache in seconds, in the absence of other directives"
+  default = 300
+}
+
+variable "caching_max_ttl" {
+  type = number
+  description = "Maximum TTL for CloudFront cache in seconds"
+  default = 86400
 }
